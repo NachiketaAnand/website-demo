@@ -24,7 +24,13 @@ function showGreeting(name, clickedButton) {
     // Check if the clicked name is Mishty
     if (name === "Mishty") {
         greetingDiv.textContent = `Hello ${name}, you are Gayyy!!`;
-    } else {
+    } 
+    // Check if the clicked name is Shalini
+    else if (name === "Shalini") {
+        greetingDiv.textContent = "Guyszzz 💅 15th ko plane mein, window seat, night ka time";
+    } 
+    // For other names
+    else {
         greetingDiv.textContent = `Hi ${name}!`;
     }
 
