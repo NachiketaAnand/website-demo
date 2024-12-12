@@ -3,28 +3,28 @@
   margin: 0;
   padding: 0;
   box-sizing: border-box;
+  font-family: 'Poppins', sans-serif;
 }
 
 body {
-  font-family: 'Poppins', sans-serif;
   background: linear-gradient(120deg, #a1c4fd, #c2e9fb);
-  color: #333;
   display: flex;
   justify-content: center;
   align-items: center;
   min-height: 100vh;
   overflow-x: hidden;
+  color: #333;
 }
 
 /* Container Styling */
 .container {
   width: 100%;
-  max-width: 700px;
-  margin: 2rem auto;
-  padding: 1.5rem;
+  max-width: 800px;
+  margin: 2rem;
+  padding: 2rem;
   background: rgba(255, 255, 255, 0.9);
-  border-radius: 1rem;
-  box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);
+  border-radius: 1.5rem;
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
   transform: scale(0.95);
   animation: fadeIn 1s forwards;
 }
@@ -43,14 +43,15 @@ body {
 
 /* Heading Styling */
 h1 {
-  font-size: 2rem;
-  text-align: center;
+  font-size: 2.4rem;
   color: #007bff;
-  text-shadow: 1px 1px 5px rgba(0, 0, 0, 0.2);
-  animation: textGlow 2s infinite alternate;
+  text-align: center;
+  margin-bottom: 2rem;
+  text-shadow: 1px 1px 5px rgba(0, 0, 0, 0.3);
+  animation: glowText 2s infinite alternate;
 }
 
-@keyframes textGlow {
+@keyframes glowText {
   from {
     text-shadow: 1px 1px 5px rgba(0, 123, 255, 0.2);
   }
@@ -59,82 +60,78 @@ h1 {
   }
 }
 
-/* Course Styling */
+/* Course Box Styling */
 .course {
-  display: flex;
-  justify-content: flex-start;
-  align-items: center;
   background: #f7faff;
-  padding: 0.8rem 1rem;
-  border-radius: 8px;
+  padding: 1rem;
+  border-radius: 1rem;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  margin-bottom: 1rem;
+  margin-bottom: 1.5rem;
   transition: transform 0.3s ease, box-shadow 0.3s ease;
+  animation: courseFadeIn 1s ease-out;
 }
 
+@keyframes courseFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Course Hover Effect */
 .course:hover {
-  transform: scale(1.02);
-  box-shadow: 0 8px 12px rgba(0, 0, 0, 0.2);
+  transform: scale(1.05);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
 }
 
-label {
-  font-weight: bold;
-  color: #333;
-  margin-right: 1rem;
-  flex: 0 0 30%;
-}
-
-select {
-  width: 30%;
-  padding: 0.6rem;
+/* Input Styling */
+input[type="text"], select {
+  width: 100%;
+  padding: 0.8rem;
   font-size: 1rem;
   border: 1px solid #ccc;
   border-radius: 5px;
-  transition: all 0.3s ease;
-  background: #fff;
-  margin-right: 1rem;
+  margin-bottom: 1rem;
+  transition: border-color 0.3s ease;
 }
 
-select[id^="credit"] {
-  order: 0;
-}
-
-select[id^="grade"] {
-  order: 1;
-}
-
-select:hover {
+input[type="text"]:focus, select:focus {
   border-color: #007bff;
-  box-shadow: 0 0 5px rgba(0, 123, 255, 0.3);
+  outline: none;
 }
 
 /* Button Styling */
 button {
-  padding: 0.8rem 2rem;
-  font-size: 1.1rem;
-  font-weight: bold;
+  background-color: #007bff;
   color: white;
-  background: linear-gradient(45deg, #007bff, #0056b3);
   border: none;
-  border-radius: 8px;
+  padding: 1rem 2rem;
+  font-size: 1.1rem;
+  border-radius: 5px;
   cursor: pointer;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  transition: background 0.3s ease, transform 0.2s ease;
-  align-self: center;
-  margin-top: 1.5rem;
+  margin-top: 1rem;
+  transition: transform 0.3s ease, background-color 0.3s ease;
 }
 
 button:hover {
-  background: linear-gradient(45deg, #0056b3, #003f7f);
-  transform: scale(1.05);
+  transform: scale(1.1);
+  background-color: #0056b3;
 }
 
-/* Result Display */
+button:active {
+  background-color: #00408d;
+}
+
+/* Result Styling */
 #result {
-  font-size: 1.5rem;
-  color: #007bff;
+  font-size: 2rem;
   text-align: center;
-  margin-top: 1.5rem;
+  color: #007bff;
+  margin-top: 2rem;
   text-shadow: 1px 1px 5px rgba(0, 0, 0, 0.2);
   opacity: 0;
   animation: fadeResult 1s forwards;
@@ -151,62 +148,142 @@ button:hover {
   }
 }
 
-/* Responsive Design for Small Screens */
-@media (max-width: 480px) {
+/* Add Course Button Styling */
+#addCourse {
+  background-color: #28a745;
+  color: white;
+  border: none;
+  padding: 1rem 2rem;
+  font-size: 1.1rem;
+  border-radius: 5px;
+  cursor: pointer;
+  margin-top: 1rem;
+  transition: transform 0.3s ease, background-color 0.3s ease;
+}
+
+#addCourse:hover {
+  transform: scale(1.1);
+  background-color: #218838;
+}
+
+/* Loading Screen */
+#loading-screen {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(255, 255, 255, 0.9);
+  z-index: 9999;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  visibility: hidden;
+}
+
+#loading-screen.show {
+  visibility: visible;
+}
+
+.spinner {
+  border: 6px solid #f3f3f3;
+  border-top: 6px solid #007bff;
+  border-radius: 50%;
+  width: 50px;
+  height: 50px;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
   .container {
-    padding: 1rem;
+    padding: 1.5rem;
     width: 90%;
   }
 
   h1 {
-    font-size: 1.8rem;
+    font-size: 2rem;
   }
 
-  label {
-    font-size: 0.9rem;
-    margin-right: 0;
-    flex: 0 0 100%;
-    margin-bottom: 0.5rem;
-  }
-
-  select {
-    font-size: 0.9rem;
-    padding: 0.8rem;
-    width: 100%;
+  .course {
+    padding: 1rem;
     margin-bottom: 1rem;
   }
 
   button {
     font-size: 1rem;
-    padding: 0.8rem 2rem;
+    padding: 0.8rem 1.5rem;
+  }
+
+  #addCourse {
+    padding: 0.8rem 1.5rem;
+  }
+
+  input[type="text"], select {
+    padding: 0.7rem;
+    font-size: 0.9rem;
+  }
+
+  #result {
+    font-size: 1.5rem;
+  }
+}
+
+@media (max-width: 480px) {
+  h1 {
+    font-size: 1.8rem;
+  }
+
+  .container {
+    padding: 1rem;
+    width: 90%;
+  }
+
+  input[type="text"], select {
+    padding: 0.6rem;
+    font-size: 0.85rem;
+  }
+
+  button {
+    font-size: 0.9rem;
+    padding: 0.7rem 1.3rem;
+  }
+
+  #addCourse {
+    padding: 0.7rem 1.3rem;
   }
 
   #result {
     font-size: 1.2rem;
   }
+}
 
-  .course {
-    flex-direction: column;
-    align-items: stretch;
+/* Background color animation */
+@keyframes changeBackground {
+  0% {
+    background: #a1c4fd;  /* Light Blue */
+  }
+  25% {
+    background: #c2e9fb;  /* Light Cyan */
+  }
+  50% {
+    background: #ff9a8b;  /* Light Coral */
+  }
+  75% {
+    background: #ff6a88;  /* Pink */
+  }
+  100% {
+    background: #a1c4fd;  /* Light Blue again */
   }
 }
 
-@media (max-width: 768px) {
-  .container {
-    padding: 1.5rem;
-    width: 80%;
-  }
-
-  h1 {
-    font-size: 2.2rem;
-  }
-
-  button {
-    font-size: 1.1rem;
-  }
-
-  select {
-    width: 45%; /* Adjust for medium-sized screens */
-    margin-right: 0.8rem;
-  }
+/* Apply the animation to the body */
+body {
+  animation: changeBackground 15s infinite;  /* Animation will last 15 seconds, and it will loop indefinitely */
+  transition: background 0.5s ease-in-out;
 }
