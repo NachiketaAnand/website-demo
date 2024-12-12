@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Who's Accessing?</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- Loading Screen -->
+    <div id="loading-screen">
+        <div class="spinner"></div>
+    </div>
+
+    <!-- Landscape Warning Overlay -->
+    <div id="landscape-warning">
+        <h2>Guys landscpae krlo,potrait mein meri hi shakal pe zoom ho rakha hai yeh</h2>
+    </div>
+
+    <div class="wrapper">
+        <div class="container">
+            <h1>Hiiiii, who's there??</h1>
+            <div id="buttons">
+                <button onclick="showGreeting('Nik', this)">Nik</button>
+                <button onclick="showGreeting('Aayush', this)">Aayush</button>
+                <button onclick="showGreeting('Shalini', this)">Shalini</button>
+                <button onclick="showGreeting('Mishty', this)">Mishty</button>
+            </div>
+            <div id="greeting"></div>
+        </div>
+    </div>
+    
+    <script src="script.js"></script>
+</body>
+</html>

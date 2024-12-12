@@ -1,0 +1,172 @@
+/* General Reset */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* Body Styling */
+body {
+    background-image: url('images/background.jpg'); /* Path to your image */
+    background-size: cover; /* Ensures the image covers the entire page */
+    background-position: center center; /* Centers the image */
+    background-attachment: fixed; /* Keeps the background fixed while scrolling */
+    height: 100vh; /* Makes the background cover the full height of the viewport */
+    font-family: 'Arial', sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: white; /* White text color for contrast */
+    animation: fadeInBackground 2s ease-in-out; /* Fade-in animation for the background */
+}
+
+/* Fade-in animation for background */
+@keyframes fadeInBackground {
+    0% {
+        opacity: 0;
+    }
+    100% {
+        opacity: 1;
+    }
+}
+
+/* Landscape Warning Overlay */
+#landscape-warning {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.8);
+    color: white;
+    display: none;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    font-size: 1.5rem;
+    z-index: 10; /* Ensures the warning is above other content */
+}
+
+#landscape-warning h2 {
+    margin: 20px;
+}
+
+/* Wrapper to hold all content */
+.wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    width: 100%;
+    height: 100%;
+    text-align: center;
+    animation: fadeInWrapper 1.5s ease-in-out 1s; /* Fade-in effect for the content */
+    z-index: 5; /* Keeps the content below the overlay */
+}
+
+/* Heading Styling */
+h1 {
+    font-size: 3rem;
+    margin-bottom: 30px;
+    animation: slideIn 1.5s ease-out forwards;
+    color: #f0f0f0; /* Light gray text for the heading */
+}
+
+/* Button Styling */
+button {
+    font-size: 1.2rem;
+    padding: 15px 30px;
+    margin: 10px;
+    background-color: rgba(0, 0, 0, 0.7); /* Dark background for buttons */
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: transform 0.3s ease, background-color 0.3s ease;
+}
+
+/* Button Hover Effect */
+button:hover {
+    transform: scale(1.1); /* Slightly enlarge the button on hover */
+    background-color: rgba(0, 0, 0, 0.85); /* Darker background on hover */
+}
+
+/* Animation for the Name Buttons */
+@keyframes slideIn {
+    from {
+        transform: translateY(-50px);
+        opacity: 0;
+    }
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+/* Animation for Names disappearing */
+@keyframes moveOutUp {
+    0% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+    100% {
+        opacity: 0;
+        transform: translateY(-100vh); /* Move the button upwards out of the screen */
+    }
+}
+
+/* Styling for the Greeting Message */
+#greeting {
+    font-size: 2rem;
+    margin-top: 20px;
+    animation: fadeInGreeting 1s ease-out forwards;
+}
+
+/* Fade-in animation for Greeting */
+@keyframes fadeInGreeting {
+    0% {
+        opacity: 0;
+    }
+    100% {
+        opacity: 1;
+    }
+}
+
+/* Custom CSS for Buttons that are clicked */
+button.moving-out {
+    animation: moveOutUp 1s forwards;
+}
+
+/* Responsive Design: Media Queries */
+
+/* Mobile Portrait */
+@media only screen and (max-width: 600px) and (orientation: portrait) {
+    /* Show Landscape Warning */
+    #landscape-warning {
+        display: flex;
+    }
+
+    /* Add a semi-transparent overlay to the background */
+    body::after {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.5); /* Darken the background */
+        z-index: 1; /* Place the overlay behind the content */
+    }
+}
+
+/* Hide Landscape Warning for Landscape Orientation */
+@media only screen and (max-width: 600px) and (orientation: landscape) {
+    #landscape-warning {
+        display: none;
+    }
+
+    /* Remove the background overlay */
+    body::after {
+        content: none;
+    }
+}
