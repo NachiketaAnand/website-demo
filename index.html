@@ -1,44 +1,32 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Who's Accessing?</title>
-    <link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>GPA Calculator</title>
+
+  <!-- Google Analytics 4 (GA4) Tag -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-F3HFZTDWLH"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'G-F3HFZTDWLH');
+  </script>
+
+  <link rel="stylesheet" href="styles.css">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
 </head>
 <body>
-    <!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-F3HFZTDWLH"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-
-  gtag('config', 'G-F3HFZTDWLH');
-</script>
-    <!-- Loading Screen -->
-    <div id="loading-screen">
-        <div class="spinner"></div>
+  <div class="container">
+    <h1>GPA Calculator</h1>
+    <div id="courses">
+      <!-- Courses will be dynamically generated here -->
     </div>
-
-    <!-- Landscape Warning Overlay -->
-    <div id="landscape-warning">
-        <h2>Guys landscpae krlo,potrait mein meri hi shakal pe zoom ho rakha hai yeh</h2>
-    </div>
-
-    <div class="wrapper">
-        <div class="container">
-            <h1>Hiiiii, who's there??</h1>
-            <div id="buttons">
-                <button onclick="showGreeting('Nik', this)">Nik</button>
-                <button onclick="showGreeting('Aayush', this)">Aayush</button>
-                <button onclick="showGreeting('Shalini', this)">Shalini</button>
-                <button onclick="showGreeting('Mishty', this)">Mishty</button>
-            </div>
-            <div id="greeting"></div>
-        </div>
-    </div>
-    
-    <script src="script.js"></script>
+    <button id="calculate">Calculate GPA</button>
+    <div id="result"></div>
+  </div>
+  <script src="script.js"></script>
 </body>
 </html>
