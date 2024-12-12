@@ -1,172 +1,212 @@
 /* General Reset */
 * {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
 }
 
-/* Body Styling */
 body {
-    background-image: url('images/background.jpg'); /* Path to your image */
-    background-size: cover; /* Ensures the image covers the entire page */
-    background-position: center center; /* Centers the image */
-    background-attachment: fixed; /* Keeps the background fixed while scrolling */
-    height: 100vh; /* Makes the background cover the full height of the viewport */
-    font-family: 'Arial', sans-serif;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    color: white; /* White text color for contrast */
-    animation: fadeInBackground 2s ease-in-out; /* Fade-in animation for the background */
+  font-family: 'Poppins', sans-serif;
+  background: linear-gradient(120deg, #a1c4fd, #c2e9fb);
+  color: #333;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  overflow-x: hidden;
 }
 
-/* Fade-in animation for background */
-@keyframes fadeInBackground {
-    0% {
-        opacity: 0;
-    }
-    100% {
-        opacity: 1;
-    }
+/* Container Styling */
+.container {
+  width: 100%;
+  max-width: 700px;
+  margin: 2rem auto;
+  padding: 1.5rem;
+  background: rgba(255, 255, 255, 0.9);
+  border-radius: 1rem;
+  box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);
+  transform: scale(0.95);
+  animation: fadeIn 1s forwards;
 }
 
-/* Landscape Warning Overlay */
-#landscape-warning {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.8);
-    color: white;
-    display: none;
-    justify-content: center;
-    align-items: center;
-    text-align: center;
-    font-size: 1.5rem;
-    z-index: 10; /* Ensures the warning is above other content */
-}
-
-#landscape-warning h2 {
-    margin: 20px;
-}
-
-/* Wrapper to hold all content */
-.wrapper {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-direction: column;
-    width: 100%;
-    height: 100%;
-    text-align: center;
-    animation: fadeInWrapper 1.5s ease-in-out 1s; /* Fade-in effect for the content */
-    z-index: 5; /* Keeps the content below the overlay */
+/* Fade In Animation */
+@keyframes fadeIn {
+  0% {
+    transform: scale(0.5);
+    opacity: 0;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
 }
 
 /* Heading Styling */
 h1 {
-    font-size: 3rem;
-    margin-bottom: 30px;
-    animation: slideIn 1.5s ease-out forwards;
-    color: #f0f0f0; /* Light gray text for the heading */
+  font-size: 2rem;
+  text-align: center;
+  color: #007bff;
+  text-shadow: 1px 1px 5px rgba(0, 0, 0, 0.2);
+  animation: textGlow 2s infinite alternate;
+}
+
+@keyframes textGlow {
+  from {
+    text-shadow: 1px 1px 5px rgba(0, 123, 255, 0.2);
+  }
+  to {
+    text-shadow: 1px 1px 15px rgba(0, 123, 255, 0.6);
+  }
+}
+
+/* Course Styling */
+.course {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  background: #f7faff;
+  padding: 0.8rem 1rem;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  margin-bottom: 1rem;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.course:hover {
+  transform: scale(1.02);
+  box-shadow: 0 8px 12px rgba(0, 0, 0, 0.2);
+}
+
+label {
+  font-weight: bold;
+  color: #333;
+  margin-right: 1rem;
+  flex: 0 0 30%;
+}
+
+select {
+  width: 30%;
+  padding: 0.6rem;
+  font-size: 1rem;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  transition: all 0.3s ease;
+  background: #fff;
+  margin-right: 1rem;
+}
+
+select[id^="credit"] {
+  order: 0;
+}
+
+select[id^="grade"] {
+  order: 1;
+}
+
+select:hover {
+  border-color: #007bff;
+  box-shadow: 0 0 5px rgba(0, 123, 255, 0.3);
 }
 
 /* Button Styling */
 button {
-    font-size: 1.2rem;
-    padding: 15px 30px;
-    margin: 10px;
-    background-color: rgba(0, 0, 0, 0.7); /* Dark background for buttons */
-    color: white;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    transition: transform 0.3s ease, background-color 0.3s ease;
+  padding: 0.8rem 2rem;
+  font-size: 1.1rem;
+  font-weight: bold;
+  color: white;
+  background: linear-gradient(45deg, #007bff, #0056b3);
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  transition: background 0.3s ease, transform 0.2s ease;
+  align-self: center;
+  margin-top: 1.5rem;
 }
 
-/* Button Hover Effect */
 button:hover {
-    transform: scale(1.1); /* Slightly enlarge the button on hover */
-    background-color: rgba(0, 0, 0, 0.85); /* Darker background on hover */
+  background: linear-gradient(45deg, #0056b3, #003f7f);
+  transform: scale(1.05);
 }
 
-/* Animation for the Name Buttons */
-@keyframes slideIn {
-    from {
-        transform: translateY(-50px);
-        opacity: 0;
-    }
-    to {
-        transform: translateY(0);
-        opacity: 1;
-    }
+/* Result Display */
+#result {
+  font-size: 1.5rem;
+  color: #007bff;
+  text-align: center;
+  margin-top: 1.5rem;
+  text-shadow: 1px 1px 5px rgba(0, 0, 0, 0.2);
+  opacity: 0;
+  animation: fadeResult 1s forwards;
 }
 
-/* Animation for Names disappearing */
-@keyframes moveOutUp {
-    0% {
-        opacity: 1;
-        transform: translateY(0);
-    }
-    100% {
-        opacity: 0;
-        transform: translateY(-100vh); /* Move the button upwards out of the screen */
-    }
+@keyframes fadeResult {
+  0% {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
-/* Styling for the Greeting Message */
-#greeting {
-    font-size: 2rem;
-    margin-top: 20px;
-    animation: fadeInGreeting 1s ease-out forwards;
+/* Responsive Design for Small Screens */
+@media (max-width: 480px) {
+  .container {
+    padding: 1rem;
+    width: 90%;
+  }
+
+  h1 {
+    font-size: 1.8rem;
+  }
+
+  label {
+    font-size: 0.9rem;
+    margin-right: 0;
+    flex: 0 0 100%;
+    margin-bottom: 0.5rem;
+  }
+
+  select {
+    font-size: 0.9rem;
+    padding: 0.8rem;
+    width: 100%;
+    margin-bottom: 1rem;
+  }
+
+  button {
+    font-size: 1rem;
+    padding: 0.8rem 2rem;
+  }
+
+  #result {
+    font-size: 1.2rem;
+  }
+
+  .course {
+    flex-direction: column;
+    align-items: stretch;
+  }
 }
 
-/* Fade-in animation for Greeting */
-@keyframes fadeInGreeting {
-    0% {
-        opacity: 0;
-    }
-    100% {
-        opacity: 1;
-    }
-}
+@media (max-width: 768px) {
+  .container {
+    padding: 1.5rem;
+    width: 80%;
+  }
 
-/* Custom CSS for Buttons that are clicked */
-button.moving-out {
-    animation: moveOutUp 1s forwards;
-}
+  h1 {
+    font-size: 2.2rem;
+  }
 
-/* Responsive Design: Media Queries */
+  button {
+    font-size: 1.1rem;
+  }
 
-/* Mobile Portrait */
-@media only screen and (max-width: 600px) and (orientation: portrait) {
-    /* Show Landscape Warning */
-    #landscape-warning {
-        display: flex;
-    }
-
-    /* Add a semi-transparent overlay to the background */
-    body::after {
-        content: '';
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background-color: rgba(0, 0, 0, 0.5); /* Darken the background */
-        z-index: 1; /* Place the overlay behind the content */
-    }
-}
-
-/* Hide Landscape Warning for Landscape Orientation */
-@media only screen and (max-width: 600px) and (orientation: landscape) {
-    #landscape-warning {
-        display: none;
-    }
-
-    /* Remove the background overlay */
-    body::after {
-        content: none;
-    }
+  select {
+    width: 45%; /* Adjust for medium-sized screens */
+    margin-right: 0.8rem;
+  }
 }
