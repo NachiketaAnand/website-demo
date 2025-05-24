@@ -36,5 +36,5 @@ yes.addEventListener("click", yesAnswerMethod);
 no.addEventListener("click", noAnswerMethod);
 
 document.getElementById("fix").addEventListener("click", function () {
-    window.location = "https://wa.me/+918802130983?text=Chalo date pr chalein !!!!!";
+    window.location = "https://wa.me/+919667240579?text=Lets gooo!!!!!";
 });
