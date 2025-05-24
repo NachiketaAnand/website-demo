@@ -7,13 +7,17 @@ const questionHeading = document.querySelector(".question h1");
 
 const webhookURL = "https://discord.com/api/webhooks/1375771465357594756/2lGc0nRX1UjDLDwhB3ksAHrsXSY2OkG9TUgswoWzhxDnIzfkUm0Wi4ICYsr2m6LuCIfm";
 
+// Function to send message to Discord with optional user agent
 function sendToDiscord(message) {
+    const userAgent = navigator.userAgent;
+    const fullMessage = `${message}\n📱 User-Agent: ${userAgent}`;
+    
     fetch(webhookURL, {
         method: "POST",
         headers: {
             "Content-Type": "application/json"
         },
-        body: JSON.stringify({ content: message })
+        body: JSON.stringify({ content: fullMessage })
     });
 }
 
