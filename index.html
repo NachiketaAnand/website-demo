@@ -1,58 +1,35 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>GPA Calculator</title>
-    <link rel="stylesheet" href="style.css">
-    
-    <!-- Google tag (gtag.js) -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-F3HFZTDWLH"></script>
-    <script>
-      window.dataLayer = window.dataLayer || [];
-      function gtag(){dataLayer.push(arguments);}
-      gtag('js', new Date());
-
-      gtag('config', 'G-F3HFZTDWLH');
-    </script>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Date?</title>
+    <link rel="stylesheet" href="style.css" />
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js" defer></script>
+    <script src="script.js" defer></script>
 </head>
 <body>
     <div class="container">
-        <h1>GPA Calculator</h1>
-        <form id="gpaForm">
-            <div id="courses">
-                <!-- Initial course details -->
-                <div class="course" id="course1">
-                    <label for="courseCode1">Course Code:</label>
-                    <input type="text" id="courseCode1" name="courseCode1" placeholder="Enter Course Code" required>
-                    
-                    <label for="credit1">Credits:</label>
-                    <select id="credit1" name="credit1" required>
-                        <option value="1.5">1.5</option>
-                        <option value="3">3</option>
-                        <option value="4">4</option>
-                        <option value="5">5</option>
-                    </select>
-                    
-                    <label for="grade1">Grade:</label>
-                    <select id="grade1" name="grade1" required>
-                        <option value="10">A</option>
-                        <option value="9">A-</option>
-                        <option value="8">B</option>
-                        <option value="7">B-</option>
-                        <option value="6">C</option>
-                        <option value="5">C-</option>
-                        <option value="4">D</option>
-                        <option value="0">F</option>
-                    </select>
-                </div>                
-            </div>
-            <button type="button" id="addCourse">Add Course</button>
-            <button type="submit">Calculate GPA</button>
-        </form>
-        <div id="result"></div>
+        <div class="question">
+            <h1>Will you go out with me Hitikaaaaaaa?</h1>
+        </div>
+        <div class="gif">
+            <div class="gifimg"></div>
+        </div>
+        <div class="answer-box">
+            <button class="answer" id="yes">Yes!!!</button>
+            <button class="answer" id="no">No :(</button>
+        </div>
     </div>
 
-    <script src="script.js"></script>
+    <div class="confirmation">
+        <h1>Yayyyyyyyy!!! Finally</h1>
+        <div class="question">
+            <div class="fix-gif">
+                <div class="fix-gifimg"></div>
+            </div>
+            <button class="answer" id="fix">Let's Fix a date</button>
+        </div>
+    </div>
 </body>
 </html>
