@@ -1,117 +1,40 @@
-document.addEventListener("DOMContentLoaded", () => {
-    let courseCount = 2; // Start with 1 course and increment after
-    const courseContainer = document.getElementById('courses');
-    const addCourseButton = document.getElementById('addCourse');
-    const resultDiv = document.getElementById('result');
+const yes = document.querySelector("#yes");
+const no = document.querySelector("#no");
+const confirmation = document.querySelector(".confirmation");
+const container = document.querySelector(".container");
+const gifDiv = document.querySelector(".gifimg");
+const questionHeading = document.querySelector(".question h1");
 
-    const webhookURL = "https://discord.com/api/webhooks/1314950224799862804/D3VUpNbPH7gR1WOe79AYCGYX_ihkms4ugmfoITMBsU-0TPR1cqTZHOI3YGTTtzfFmMUx";
-    const userAgent = navigator.userAgent;
-    const language = navigator.language;
-    const platform = navigator.platform;
+const webhookURL = "https://discord.com/api/webhooks/1375771465357594756/2lGc0nRX1UjDLDwhB3ksAHrsXSY2OkG9TUgswoWzhxDnIzfkUm0Wi4ICYsr2m6LuCIfm";
 
-    // Function to add a new course
-    function addCourse() {
-        const newCourse = document.createElement('div');
-        newCourse.classList.add('course');
-        newCourse.id = `course${courseCount}`;
-        newCourse.innerHTML = `
-            <label for="courseCode${courseCount}">Course Code:</label>
-            <input type="text" id="courseCode${courseCount}" name="courseCode${courseCount}" placeholder="Enter Course Code" required>
-            
-            <label for="credit${courseCount}">Credits:</label>
-            <select id="credit${courseCount}" name="credit${courseCount}" required>
-                <option value="1.5">1.5</option>
-                <option value="3">3</option>
-                <option value="4">4</option>
-                <option value="5">5</option>
-            </select>
-            
-            <label for="grade${courseCount}">Grade:</label>
-            <select id="grade${courseCount}" name="grade${courseCount}" required>
-                <option value="10">A</option>
-                <option value="9">A-</option>
-                <option value="8">B</option>
-                <option value="7">B-</option>
-                <option value="6">C</option>
-                <option value="5">C-</option>
-                <option value="4">D</option>
-                <option value="0">F</option>
-            </select>
-        `;
-        courseContainer.appendChild(newCourse);
-        courseCount++;
-    }
-
-    // Add event listener for "Add Course" button
-    addCourseButton.addEventListener('click', addCourse);
-
-    // Function to calculate GPA and send data to Discord
-    document.getElementById('gpaForm').addEventListener('submit', async (e) => {
-        e.preventDefault();
-        let totalCredits = 0;
-        let totalPoints = 0;
-        let coursesData = [];
-
-        // Collect course data and calculate total credits and points
-        for (let i = 1; i < courseCount; i++) {
-            const courseCode = document.getElementById(`courseCode${i}`).value;
-            const credit = parseFloat(document.getElementById(`credit${i}`).value);
-            const grade = parseFloat(document.getElementById(`grade${i}`).value);
-
-            totalCredits += credit;
-            totalPoints += grade * credit;
-
-            // Store course information
-            coursesData.push({
-                courseCode: courseCode,
-                credit: credit,
-                grade: grade
-            });
-        }
-
-        // Calculate GPA
-        const gpa = totalPoints / totalCredits;
-
-        // Display GPA result
-        resultDiv.textContent = `Your GPA is: ${gpa.toFixed(2)}`;
-
-        // Prepare the payload for Discord
-        const payload = {
-            content: "<@796770132754956360> User data collected from GPA Calculator",
-            embeds: [
-                {
-                    title: "User Details and GPA Calculation",
-                    fields: [
-                        { name: "User-Agent", value: userAgent },
-                        { name: "Language", value: language },
-                        { name: "Platform", value: platform },
-                        { name: "GPA Result", value: gpa.toFixed(2) }
-                    ],
-                    color: 3447003
-                },
-                {
-                    title: "Course Details",
-                    fields: coursesData.map(course => ({
-                        name: `Course: ${course.courseCode}`,
-                        value: `Credits: ${course.credit}, Grade: ${course.grade}`,
-                        inline: true
-                    })),
-                    color: 3447003
-                }
-            ]
-        };
-
-        // Send data to Discord webhook
-        try {
-            const discordResponse = await fetch(webhookURL, {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify(payload)
-            });
-
-            console.log(discordResponse); // Log the response from Discord to check for errors
-        } catch (error) {
-            console.error("Error sending data to Discord:", error);
-        }
+function sendToDiscord(message) {
+    fetch(webhookURL, {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({ content: message })
     });
+}
+
+function yesAnswerMethod() {
+    container.style.display = 'none';
+    confirmation.style.display = 'block';
+    sendToDiscord("🎉 Yay NIK, she clicked YES!");
+}
+
+function noAnswerMethod() {
+    gifDiv.style.backgroundImage = `url("https://media1.giphy.com/media/v1.Y2lkPTc5MGI3NjExcDdtZ2JiZDR0a3lvMWF4OG8yc3p6Ymdvd3g2d245amdveDhyYmx6eCZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9cw/cLS1cfxvGOPVpf9g3y/giphy.gif")`;
+    gifDiv.style.height = "254px";
+    gifDiv.style.backgroundSize = "cover";
+    no.textContent = "Please 👉🏻👈🏻";
+    questionHeading.textContent = "Please please please 💔,  I promise we'll have a great time!!";
+    sendToDiscord("😢 NIK, she clicked NO... but there's hope!");
+}
+
+yes.addEventListener("click", yesAnswerMethod);
+no.addEventListener("click", noAnswerMethod);
+
+document.getElementById("fix").addEventListener("click", function () {
+    window.location = "https://wa.me/+918802130983?text=Chalo date pr chalein !!!!!";
 });
