@@ -1,37 +1,49 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <title>i hate coding</title>
-    <link rel="stylesheet" href="style.css" />
-    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js" defer></script>
-    <script src="script.js" defer></script>
-    <link rel="icon" href="https://em-content.zobj.net/source/microsoft-teams/337/flushed-face_1f633.png" type="image/png">
-
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  
+  <!-- CUSTOMIZE: Change the page title -->
+  <title>For you &lt;3</title>
+  
+  <!-- CUSTOMIZE: Update the favicon path/filename as needed -->
+  <link rel="icon" type="image/png" href="./assets/favicon.png" sizes="32x32">
+  
+  <!-- Link to your stylesheet - don't change unless you rename style.css -->
+  <link rel="stylesheet" href="style.css">
+  
+  <!-- CUSTOMIZE: You can add Google Fonts or other resources here -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Pixelify+Sans:wght@400;500;600&display=swap" rel="stylesheet">
 </head>
 <body>
-    <div class="container">
-        <div class="question">
-            <h1>Will you go out with me Hitikaaaaaaa?</h1>
-        </div>
-        <div class="gif">
-            <div class="gifimg"></div>
-        </div>
-        <div class="answer-box">
-            <button class="answer" id="yes">Yes!!!</button>
-            <button class="answer" id="no">No :(</button>
-        </div>
+  <div class="container">
+    <header>
+      <!-- CUSTOMIZE: Change the header text -->
+      <h1>For you &lt;3</h1>
+      
+      <div class="shrink-close-icons">
+        <!-- CUSTOMIZE: Update icon paths/filenames as needed -->
+        <img src="./assets/shrink-icon.png" alt="Shrink Icon" class="shrink-icon" />
+        <img src="./assets/close-icon.png" alt="Close Icon" class="shrink-icon" />
+      </div> 
+    </header>
+    
+    <div class="inner-container">
+      <!-- The image is loaded via CSS from the --image-path-content variable -->
+      <div class="image-content"></div>
+      
+      <!-- CUSTOMIZE: Change the button text -->
+      <button id="main-button">Grow!</button>
+      
+      <!-- CUSTOMIZE: Change the final message text -->
+      <div class="final-message">Have a good day!</div>
     </div>
+  </div>
 
-    <div class="confirmation">
-        <h1>Yayyyyyyyy!!! Finally (Happy belated birthday btw :D)</h1>
-        <div class="question">
-            <div class="fix-gif">
-                <div class="fix-gifimg"></div>
-            </div>
-            <button class="answer" id="fix">Let's Fix a date</button>
-        </div>
-    </div>
+  <!-- Link to your JavaScript - don't change unless you rename index.js -->
+  <script src="index.js"></script>
 </body>
 </html>
