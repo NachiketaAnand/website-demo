@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Lassi Pussi</title>
+    <title>Local Code Share</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css">
     <style>
         body { 
@@ -23,8 +23,7 @@
             display: flex; 
             flex-direction: column; 
             padding: 20px; 
-            box-sizing: border-box; 
-            /* Added to make flex layout work in column */
+            box-sizing: border-box;
             height: 100%; 
         }
         #user-list-container { 
@@ -37,6 +36,7 @@
             height: 100vh; 
             overflow-y: auto; 
             flex-shrink: 0; /* Prevents shrinking */
+            display: none; /* <-- 1. HIDE BY DEFAULT */
         }
         #user-list-container h2 { margin-top: 0; font-size: 1.1em; }
         #user-list { list-style-type: none; padding: 0; margin: 0; }
@@ -46,7 +46,7 @@
             list-style-type: none; 
             margin: 0; 
             padding: 0; 
-            flex-grow: 1; /* Fills vertical space */
+            flex-grow: 1;
             overflow-y: scroll; 
             border: 1px solid #ddd; 
             background: #fff; 
@@ -58,12 +58,20 @@
         pre { background: #2d2d2d; color: #f1f1f1; padding: 15px; border-radius: 5px; overflow-x: auto; white-space: pre; position: relative; }
         code { font-family: "Courier New", Courier, monospace; }
         
-        /* --- BUTTON STYLES (UPDATED) --- */
+        /* --- NEW TIMESTAMP STYLE --- */
+        .timestamp {
+            font-size: 0.75em;
+            opacity: 0.6;
+            margin-left: 10px;
+            font-weight: normal;
+        }
+
+        /* --- BUTTON STYLES --- */
         .btn { border: none; padding: 5px 8px; border-radius: 3px; cursor: pointer; color: white; }
         .copy-btn { 
             position: absolute; 
             top: 5px; 
-            left: 5px; /* <-- MOVED TO LEFT */
+            left: 5px;
             background: #555; 
         }
         .copy-btn:hover { background: #777; }
@@ -72,19 +80,24 @@
         .delete-btn { 
             position: absolute; 
             top: 5px; 
-            right: 5px; /* <-- Moved to far right */
+            right: 5px;
             background: #d93025; 
         }
         .delete-btn:hover { background: #a52714; }
         .edit-btn { 
             position: absolute; 
             top: 5px; 
-            right: 55px; /* <-- Moved next to delete */
+            right: 55px;
             background: #007aff; 
         }
         .edit-btn:hover { background: #0056b3; }
         
         body.is-admin .admin-btn { display: inline-block; }
+
+        /* --- 2. SHOW USER LIST FOR ADMINS --- */
+        body.is-admin #user-list-container {
+            display: block;
+        }
 
         /* --- DELETED MESSAGE STYLE --- */
         .is-deleted pre { background: #f0f0f0; }
@@ -105,23 +118,23 @@
         #input { flex-grow: 1; border: 1px solid #ddd; padding: 10px; border-radius: 5px; min-height: 50px; resize: vertical; }
         #form button { background: #007aff; color: white; border: none; padding: 10px 15px; border-radius: 5px; margin-left: 10px; cursor: pointer; }
 
-        /* --- RESPONSIVENESS (NEW) --- */
+        /* --- RESPONSIVENESS --- */
         @media (max-width: 768px) {
             #app-container {
-                flex-direction: column; /* Stack chat and users vertically */
+                flex-direction: column;
             }
             #chat-container {
-                padding: 10px; /* Reduce padding */
-                height: 70vh; /* Chat area takes 70% of height */
+                padding: 10px;
+                height: 70vh;
             }
             #user-list-container {
-                width: 100%; /* Full width */
-                height: 30vh; /* User list takes 30% of height */
-                border-left: none; /* Remove side border */
-                border-top: 1px solid #ddd; /* Add top border */
+                width: 100%;
+                height: 30vh;
+                border-left: none;
+                border-top: 1px solid #ddd;
             }
             #messages {
-                height: 100%; /* Fill the chat-container */
+                height: 100%;
             }
             #form {
                 margin-top: 5px;
@@ -208,6 +221,22 @@
             nameSpan.textContent = data.name;
             item.appendChild(nameSpan);
 
+            // --- TIMESTAMP CODE ---
+            if (data.timestamp) {
+                const date = new Date(data.timestamp);
+                const timeString = date.toLocaleString('en-US', {
+                    hour: '2-digit',
+                    minute: '2-digit',
+                    hour12: true
+                });
+                
+                const timeSpan = document.createElement('span');
+                timeSpan.className = 'timestamp';
+                timeSpan.textContent = timeString;
+                item.appendChild(timeSpan);
+            }
+            // --- END TIMESTAMP CODE ---
+
             // --- Part 1: The Display Container ---
             const displayContainer = document.createElement('div');
             displayContainer.className = 'display-container';
@@ -237,9 +266,9 @@
             editBtn.className = 'btn admin-btn edit-btn';
 
             pre.appendChild(code);
-            pre.appendChild(copyBtn); // <-- Copy button
-            pre.appendChild(deleteBtn); // <-- Delete button
-            pre.appendChild(editBtn); // <-- Edit button
+            pre.appendChild(copyBtn);
+            pre.appendChild(deleteBtn);
+            pre.appendChild(editBtn);
             displayContainer.appendChild(pre);
             item.appendChild(displayContainer);
             
@@ -287,7 +316,6 @@
             }
             
             messages.appendChild(item);
-            // Only auto-scroll if we are near the bottom
             if (messages.scrollHeight - messages.scrollTop < messages.clientHeight + 100) {
                 messages.scrollTop = messages.scrollHeight;
             }
@@ -339,11 +367,11 @@
             }
         });
 
-        // --- NEW: Function to send message ---
+        // --- Function to send message ---
         function sendMessage() {
             if (input.value) {
                 socket.emit('sendCode', { code: input.value });
-                input.value = ''; // Clear the input
+                input.value = '';
             }
         }
 
@@ -355,22 +383,17 @@
             }
         };
 
-        // Send on button click
         form.addEventListener('submit', (e) => {
             e.preventDefault();
             sendMessage();
         });
 
-        // --- NEW: Send on "Enter" ---
         input.addEventListener('keydown', (e) => {
-            // Check if Enter is pressed AND Shift is NOT pressed
             if (e.key === 'Enter' && !e.shiftKey) {
-                e.preventDefault(); // Prevent new line
+                e.preventDefault();
                 sendMessage();
             }
-            // If Shift + Enter, it will just add a new line (default behavior)
         });
-
 
         // --- Socket Listeners (Receiving data) ---
         socket.on('loadHistory', (history) => {
