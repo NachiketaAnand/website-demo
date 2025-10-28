@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Local Code Share</title>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css">
+
+    <style>
+        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; margin: 0; background: #f4f4f4; }
+        
+        #login-screen { padding: 20px; text-align: center; margin-top: 50px; }
+        #chat-screen { display: none; /* Hidden by default */ }
+        
+        /* This is the new flex container */
+        #app-container {
+            display: flex;
+            flex-direction: row;
+            height: 100vh;
+        }
+
+        #chat-container {
+            flex-grow: 1; /* Takes up most of the space */
+            display: flex;
+            flex-direction: column;
+            padding: 20px;
+            box-sizing: border-box; /* Ensures padding is included in height/width */
+        }
+
+        /* NEW User List Panel */
+        #user-list-container {
+            width: 200px;
+            min-width: 150px;
+            background: #f0f0f0;
+            border-left: 1px solid #ddd;
+            padding: 10px;
+            box-sizing: border-box;
+            height: 100vh;
+            overflow-y: auto;
+        }
+        #user-list-container h2 { margin-top: 0; font-size: 1.1em; }
+        #user-list { list-style-type: none; padding: 0; margin: 0; }
+        #user-list li { padding: 5px 0; border-bottom: 1px solid #eee; }
+
+        /* Message List */
+        #messages {
+            list-style-type: none; margin: 0; padding: 0;
+            flex-grow: 1; /* Makes the message list fill the space */
+            overflow-y: scroll;
+            border: 1px solid #ddd; background: #fff;
+            padding: 10px; border-radius: 8px;
+        }
+        #messages li { padding: 8px 12px; margin-bottom: 10px; }
+        #messages li.notification { font-style: italic; color: #888; text-align: center; }
+        
+        pre {
+            background: #2d2d2d; color: #f1f1f1;
+            padding: 15px; border-radius: 5px;
+            overflow-x: auto; white-space: pre;
+            position: relative;
+        }
+        code { font-family: "Courier New", Courier, monospace; }
+
+        .copy-btn {
+            position: absolute; top: 5px; right: 5px;
+            background: #555; color: white; border: none;
+            padding: 5px 8px; border-radius: 3px; cursor: pointer;
+        }
+        .copy-btn:hover { background: #777; }
+        .copy-btn:active { background: #4caf50; }
+
+        /* Form styling */
+        #form { display: flex; margin-top: 10px; }
+        #input { flex-grow: 1; border: 1px solid #ddd; padding: 10px; border-radius: 5px; min-height: 50px; resize: vertical; }
+        #form button { background: #007aff; color: white; border: none; padding: 10px 15px; border-radius: 5px; margin-left: 10px; cursor: pointer; }
+    </style>
+</head>
+<body>
+
+    <div id="login-screen">
+        <h2>Enter your name</h2>
+        <p>(This will be saved for this device)</p>
+        <input id="name-input" type="text" placeholder="e.g., My Laptop" autocomplete="off" />
+        <button id="join-btn">Join</button>
+    </div>
+
+    <div id="chat-screen">
+        <div id="app-container">
+            <div id="chat-container">
+                <ul id="messages"></ul>
+                <form id="form" action="">
+                    <textarea id="input" autocomplete="off" placeholder="Paste your code here..."></textarea>
+                    <button>Send</button>
+                </form>
+            </div>
+            
+            <div id="user-list-container">
+                <h2>Online</h2>
+                <ul id="user-list">
+                    </ul>
+            </div>
+        </div>
+    </div>
+
+    <script src="/socket.io/socket.io.js"></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+
+    <script>
+        // --- Get all our HTML elements ---
+        const loginScreen = document.getElementById('login-screen');
+        const chatScreen = document.getElementById('chat-screen');
+        const joinBtn = document.getElementById('join-btn');
+        const nameInput = document.getElementById('name-input');
+        
+        const form = document.getElementById('form');
+        const input = document.getElementById('input');
+        const messages = document.getElementById('messages');
+        const userList = document.getElementById('user-list');
+
+        const socket = io();
+        let myName = '';
+
+        // --- Helper function for the copy fallback (THE FIX) ---
+        function fallbackCopyTextToClipboard(text, buttonElement) {
+            const textArea = document.createElement("textarea");
+            textArea.value = text;
+            textArea.style.position = "fixed";
+            textArea.style.top = "-9999px";
+            textArea.style.left = "-9999px";
+            document.body.appendChild(textArea);
+            textArea.focus();
+            textArea.select();
+            try {
+                const successful = document.execCommand('copy');
+                if (successful && buttonElement) {
+                    buttonElement.textContent = 'Copied!';
+                    setTimeout(() => { buttonElement.textContent = 'Copy'; }, 2000);
+                }
+            } catch (err) {
+                console.error('Fallback copy failed: ', err);
+            }
+            document.body.removeChild(textArea);
+        }
+
+        // --- Helper function to display a code message ---
+        function displayCodeMessage(data) {
+            const item = document.createElement('li');
+            
+            const nameSpan = document.createElement('strong');
+            nameSpan.textContent = data.name;
+            item.appendChild(nameSpan);
+            
+            const pre = document.createElement('pre');
+            const code = document.createElement('code');
+            code.textContent = data.code; 
+            
+            const copyBtn = document.createElement('button');
+            copyBtn.textContent = 'Copy';
+            copyBtn.className = 'copy-btn';
+
+            // --- SIMPLIFIED COPY LOGIC ---
+            copyBtn.onclick = () => {
+                // We ALWAYS use the fallback, as it's the only one
+                // that works on insecure http:// local IP addresses.
+                fallbackCopyTextToClipboard(data.code, copyBtn);
+            };
+
+            pre.appendChild(code);
+            pre.appendChild(copyBtn);
+            item.appendChild(pre);
+
+            // If you added highlight.js, this will colorize the new code
+            if (typeof hljs !== 'undefined') {
+                hljs.highlightElement(code);
+            }
+            messages.appendChild(item);
+            messages.scrollTop = messages.scrollHeight;
+        }
+
+        // --- Helper function for notifications ---
+        function showNotification(msg) {
+            const item = document.createElement('li');
+            item.className = 'notification';
+            item.textContent = msg;
+            messages.appendChild(item);
+            messages.scrollTop = messages.scrollHeight;
+        }
+
+        // --- Helper function to join the chat ---
+        function joinChat(name) {
+            myName = name;
+            localStorage.setItem('codeShareName', myName); // Save the name
+            socket.emit('join', myName);
+            loginScreen.style.display = 'none';
+            chatScreen.style.display = 'block'; // This shows the whole app container
+            input.focus();
+        }
+
+        // --- Page Load Logic (Check for saved name) ---
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedName = localStorage.getItem('codeShareName');
+            if (savedName) {
+                nameInput.value = savedName; // Pre-fill it just in case
+                joinChat(savedName); // Automatically join
+            } else {
+                loginScreen.style.display = 'block'; // Show login
+            }
+        });
+
+        // --- Event Listeners (Sending data) ---
+        joinBtn.onclick = () => {
+            const name = nameInput.value.trim();
+            if (name) {
+                joinChat(name);
+            }
+        };
+
+        form.addEventListener('submit', (e) => {
+            e.preventDefault();
+            if (input.value) {
+                socket.emit('sendCode', { code: input.value });
+                input.value = '';
+            }
+        });
+
+        // --- Socket Listeners (Receiving data) ---
+
+        // NEW: Load all history on connect
+        socket.on('loadHistory', (history) => {
+            messages.innerHTML = ''; // Clear the list
+            history.forEach(data => displayCodeMessage(data));
+        });
+
+        // A single new code snippet
+        socket.on('newCode', (data) => {
+            displayCodeMessage(data);
+        });
+
+        // Notifications
+        socket.on('userJoined', (msg) => showNotification(msg));
+        socket.on('userLeft', (msg) => showNotification(msg));
+
+        // NEW: Update the user list panel
+        socket.on('updateUserList', (users) => {
+            userList.innerHTML = ''; // Clear old list
+            users.forEach(name => {
+                const item = document.createElement('li');
+                item.textContent = name;
+                userList.appendChild(item);
+            });
+        });
+
+    </script>
+</body>
+</html>
