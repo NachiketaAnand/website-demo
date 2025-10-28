@@ -3,33 +3,85 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Local Code Share</title>
+    <title>Lassi Pussi</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css">
     <style>
-        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; margin: 0; background: #f4f4f4; }
+        body { 
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; 
+            margin: 0; 
+            background: #f4f4f4; 
+        }
         #login-screen { padding: 20px; text-align: center; margin-top: 50px; }
         #chat-screen { display: none; }
-        #app-container { display: flex; flex-direction: row; height: 100vh; }
-        #chat-container { flex-grow: 1; display: flex; flex-direction: column; padding: 20px; box-sizing: border-box; }
-        #user-list-container { width: 200px; min-width: 150px; background: #f0f0f0; border-left: 1px solid #ddd; padding: 10px; box-sizing: border-box; height: 100vh; overflow-y: auto; }
+        #app-container { 
+            display: flex; 
+            flex-direction: row; 
+            height: 100vh; 
+        }
+        #chat-container { 
+            flex-grow: 1; 
+            display: flex; 
+            flex-direction: column; 
+            padding: 20px; 
+            box-sizing: border-box; 
+            /* Added to make flex layout work in column */
+            height: 100%; 
+        }
+        #user-list-container { 
+            width: 200px; 
+            min-width: 150px; 
+            background: #f0f0f0; 
+            border-left: 1px solid #ddd; 
+            padding: 10px; 
+            box-sizing: border-box; 
+            height: 100vh; 
+            overflow-y: auto; 
+            flex-shrink: 0; /* Prevents shrinking */
+        }
         #user-list-container h2 { margin-top: 0; font-size: 1.1em; }
         #user-list { list-style-type: none; padding: 0; margin: 0; }
         #user-list li { padding: 5px 0; border-bottom: 1px solid #eee; }
-        #messages { list-style-type: none; margin: 0; padding: 0; flex-grow: 1; overflow-y: scroll; border: 1px solid #ddd; background: #fff; padding: 10px; border-radius: 8px; }
+        
+        #messages { 
+            list-style-type: none; 
+            margin: 0; 
+            padding: 0; 
+            flex-grow: 1; /* Fills vertical space */
+            overflow-y: scroll; 
+            border: 1px solid #ddd; 
+            background: #fff; 
+            padding: 10px; 
+            border-radius: 8px; 
+        }
         #messages li { padding: 8px 12px; margin-bottom: 10px; position: relative; }
         #messages li.notification { font-style: italic; color: #888; text-align: center; }
         pre { background: #2d2d2d; color: #f1f1f1; padding: 15px; border-radius: 5px; overflow-x: auto; white-space: pre; position: relative; }
         code { font-family: "Courier New", Courier, monospace; }
         
-        /* --- BUTTON STYLES --- */
+        /* --- BUTTON STYLES (UPDATED) --- */
         .btn { border: none; padding: 5px 8px; border-radius: 3px; cursor: pointer; color: white; }
-        .copy-btn { position: absolute; top: 5px; right: 5px; background: #555; }
+        .copy-btn { 
+            position: absolute; 
+            top: 5px; 
+            left: 5px; /* <-- MOVED TO LEFT */
+            background: #555; 
+        }
         .copy-btn:hover { background: #777; }
         
         .admin-btn { display: none; font-size: 0.8em; padding: 3px 6px; }
-        .delete-btn { position: absolute; top: 5px; right: 60px; background: #d93025; }
+        .delete-btn { 
+            position: absolute; 
+            top: 5px; 
+            right: 5px; /* <-- Moved to far right */
+            background: #d93025; 
+        }
         .delete-btn:hover { background: #a52714; }
-        .edit-btn { position: absolute; top: 5px; right: 110px; background: #007aff; }
+        .edit-btn { 
+            position: absolute; 
+            top: 5px; 
+            right: 55px; /* <-- Moved next to delete */
+            background: #007aff; 
+        }
         .edit-btn:hover { background: #0056b3; }
         
         body.is-admin .admin-btn { display: inline-block; }
@@ -37,7 +89,7 @@
         /* --- DELETED MESSAGE STYLE --- */
         .is-deleted pre { background: #f0f0f0; }
         .is-deleted code { color: #888; font-style: italic; }
-        .is-deleted .copy-btn, .is-deleted .admin-btn { display: none; } /* Hide buttons */
+        .is-deleted .copy-btn, .is-deleted .admin-btn { display: none; }
 
         /* --- EDITING STYLES --- */
         .edit-container { display: none; }
@@ -45,14 +97,40 @@
         .save-btn { background: #28a745; margin-right: 5px; }
         .cancel-btn { background: #888; }
         
-        /* When 'is-editing', hide display and show edit-container */
         .is-editing .display-container { display: none; }
         .is-editing .edit-container { display: block; }
         
         /* --- FORM --- */
-        #form { display: flex; margin-top: 10px; }
+        #form { display: flex; margin-top: 10px; flex-shrink: 0; }
         #input { flex-grow: 1; border: 1px solid #ddd; padding: 10px; border-radius: 5px; min-height: 50px; resize: vertical; }
         #form button { background: #007aff; color: white; border: none; padding: 10px 15px; border-radius: 5px; margin-left: 10px; cursor: pointer; }
+
+        /* --- RESPONSIVENESS (NEW) --- */
+        @media (max-width: 768px) {
+            #app-container {
+                flex-direction: column; /* Stack chat and users vertically */
+            }
+            #chat-container {
+                padding: 10px; /* Reduce padding */
+                height: 70vh; /* Chat area takes 70% of height */
+            }
+            #user-list-container {
+                width: 100%; /* Full width */
+                height: 30vh; /* User list takes 30% of height */
+                border-left: none; /* Remove side border */
+                border-top: 1px solid #ddd; /* Add top border */
+            }
+            #messages {
+                height: 100%; /* Fill the chat-container */
+            }
+            #form {
+                margin-top: 5px;
+            }
+            #input {
+                min-height: 40px;
+            }
+        }
+
     </style>
 </head>
 <body>
@@ -69,7 +147,7 @@
             <div id="chat-container">
                 <ul id="messages"></ul>
                 <form id="form" action="">
-                    <textarea id="input" autocomplete="off" placeholder="Paste your code here..."></textarea>
+                    <textarea id="input" autocomplete="off" placeholder="Paste your code here... (Enter to send, Shift+Enter for new line)"></textarea>
                     <button>Send</button>
                 </form>
             </div>
@@ -118,10 +196,9 @@
         }
 
         // --- (Display Message Helper Function) ---
-        // This function is now much more complex
         function displayCodeMessage(data) {
             const item = document.createElement('li');
-            item.dataset.id = data.id; // Store the message ID
+            item.dataset.id = data.id;
             
             if (data.isDeleted) {
                 item.classList.add('is-deleted');
@@ -131,7 +208,7 @@
             nameSpan.textContent = data.name;
             item.appendChild(nameSpan);
 
-            // --- Part 1: The Display Container (Visible by default) ---
+            // --- Part 1: The Display Container ---
             const displayContainer = document.createElement('div');
             displayContainer.className = 'display-container';
 
@@ -160,13 +237,13 @@
             editBtn.className = 'btn admin-btn edit-btn';
 
             pre.appendChild(code);
-            pre.appendChild(copyBtn);
-            pre.appendChild(deleteBtn);
-            pre.appendChild(editBtn);
+            pre.appendChild(copyBtn); // <-- Copy button
+            pre.appendChild(deleteBtn); // <-- Delete button
+            pre.appendChild(editBtn); // <-- Edit button
             displayContainer.appendChild(pre);
             item.appendChild(displayContainer);
             
-            // --- Part 2: The Edit Container (Hidden by default) ---
+            // --- Part 2: The Edit Container ---
             const editContainer = document.createElement('div');
             editContainer.className = 'edit-container';
             
@@ -194,7 +271,7 @@
             
             cancelBtn.onclick = () => {
                 item.classList.remove('is-editing');
-                editTextArea.value = data.code; // Reset text
+                editTextArea.value = data.code;
             };
             
             saveBtn.onclick = () => {
@@ -203,17 +280,17 @@
                     messageId: data.id,
                     newCode: newCode
                 });
-                // No need to change UI here, the 'loadHistory'
-                // event will come from the server and rebuild it.
             };
 
-            // Highlight syntax
             if (typeof hljs !== 'undefined') {
                 hljs.highlightElement(code);
             }
             
             messages.appendChild(item);
-            messages.scrollTop = messages.scrollHeight;
+            // Only auto-scroll if we are near the bottom
+            if (messages.scrollHeight - messages.scrollTop < messages.clientHeight + 100) {
+                messages.scrollTop = messages.scrollHeight;
+            }
         }
 
         // --- (Notification Helper Function) ---
@@ -262,6 +339,14 @@
             }
         });
 
+        // --- NEW: Function to send message ---
+        function sendMessage() {
+            if (input.value) {
+                socket.emit('sendCode', { code: input.value });
+                input.value = ''; // Clear the input
+            }
+        }
+
         // --- Event Listeners (Sending data) ---
         joinBtn.onclick = () => {
             const name = nameInput.value.trim();
@@ -270,23 +355,29 @@
             }
         };
 
+        // Send on button click
         form.addEventListener('submit', (e) => {
             e.preventDefault();
-            if (input.value) {
-                socket.emit('sendCode', { code: input.value });
-                input.value = '';
-            }
+            sendMessage();
         });
 
-        // --- Socket Listeners (Receiving data) ---
+        // --- NEW: Send on "Enter" ---
+        input.addEventListener('keydown', (e) => {
+            // Check if Enter is pressed AND Shift is NOT pressed
+            if (e.key === 'Enter' && !e.shiftKey) {
+                e.preventDefault(); // Prevent new line
+                sendMessage();
+            }
+            // If Shift + Enter, it will just add a new line (default behavior)
+        });
 
-        // THIS IS NOW THE MAIN RENDER FUNCTION
+
+        // --- Socket Listeners (Receiving data) ---
         socket.on('loadHistory', (history) => {
-            messages.innerHTML = ''; // Clear everything
+            messages.innerHTML = '';
             history.forEach(data => displayCodeMessage(data));
         });
 
-        // This just appends a new message
         socket.on('newCode', (data) => {
             displayCodeMessage(data);
         });
