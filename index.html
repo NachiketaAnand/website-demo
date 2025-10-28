@@ -36,7 +36,7 @@
             height: 100vh; 
             overflow-y: auto; 
             flex-shrink: 0; /* Prevents shrinking */
-            display: none; /* <-- 1. HIDE BY DEFAULT */
+            display: none; /* Hide by default */
         }
         #user-list-container h2 { margin-top: 0; font-size: 1.1em; }
         #user-list { list-style-type: none; padding: 0; margin: 0; }
@@ -58,14 +58,6 @@
         pre { background: #2d2d2d; color: #f1f1f1; padding: 15px; border-radius: 5px; overflow-x: auto; white-space: pre; position: relative; }
         code { font-family: "Courier New", Courier, monospace; }
         
-        /* --- NEW TIMESTAMP STYLE --- */
-        .timestamp {
-            font-size: 0.75em;
-            opacity: 0.6;
-            margin-left: 10px;
-            font-weight: normal;
-        }
-
         /* --- BUTTON STYLES --- */
         .btn { border: none; padding: 5px 8px; border-radius: 3px; cursor: pointer; color: white; }
         .copy-btn { 
@@ -94,7 +86,6 @@
         
         body.is-admin .admin-btn { display: inline-block; }
 
-        /* --- 2. SHOW USER LIST FOR ADMINS --- */
         body.is-admin #user-list-container {
             display: block;
         }
@@ -221,21 +212,7 @@
             nameSpan.textContent = data.name;
             item.appendChild(nameSpan);
 
-            // --- TIMESTAMP CODE ---
-            if (data.timestamp) {
-                const date = new Date(data.timestamp);
-                const timeString = date.toLocaleString('en-US', {
-                    hour: '2-digit',
-                    minute: '2-digit',
-                    hour12: true
-                });
-                
-                const timeSpan = document.createElement('span');
-                timeSpan.className = 'timestamp';
-                timeSpan.textContent = timeString;
-                item.appendChild(timeSpan);
-            }
-            // --- END TIMESTAMP CODE ---
+            // --- TIMESTAMP BLOCK REMOVED ---
 
             // --- Part 1: The Display Container ---
             const displayContainer = document.createElement('div');
