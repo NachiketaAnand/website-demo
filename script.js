@@ -6,7 +6,7 @@ const nameInput = document.getElementById('name-input');
 const form = document.getElementById('form');
 const input = document.getElementById('input');
 const messages = document.getElementById('messages');
-const userList = document.getElementById('user-list');
+// const userList = document.getElementById('user-list'); // <-- REMOVED
 const scrollToBottomBtn = document.getElementById('scroll-to-bottom');
 
 // --- File Elements ---
@@ -16,7 +16,7 @@ const fileStatus = document.getElementById('file-status');
 // --- END ---
 
 const socket = io("https://code-share-backend-vwwx.onrender.com");
-const BACKEND_URL = "https://code-share-backend-vwwx.onrender.com"; // Store backend URL
+const BACKEND_URL = "https://code-share-backend-vwwx.onrender.com";
 let myName = '';
 const ADMIN_KEY_STORAGE = 'codeShareAdminKey';
 
@@ -71,40 +71,30 @@ function displayMessage(data) {
         item.classList.add('is-deleted');
     }
     
-    // Add Name
     const nameSpan = document.createElement('strong');
     nameSpan.textContent = data.name;
     item.appendChild(nameSpan);
 
-    // --- Check message type ---
     if (data.type === 'file') {
-        // --- Render a File Message ---
         item.classList.add('file-message');
-        
         const fileLink = document.createElement('a');
-        fileLink.href = `${BACKEND_URL}${data.url}`; // Build full URL
+        fileLink.href = `${BACKEND_URL}${data.url}`;
         fileLink.textContent = data.fileName || 'Download File';
-        fileLink.target = '_blank'; // Open in new tab
-        fileLink.download = data.fileName; // Suggest original filename
-        
+        fileLink.target = '_blank';
+        fileLink.download = data.fileName;
         item.appendChild(fileLink);
-
     } else {
-        // --- Render a Code Message (existing logic) ---
         const displayContainer = document.createElement('div');
         displayContainer.className = 'display-container';
-
         const pre = document.createElement('pre');
         const code = document.createElement('code');
-        code.textContent = data.content; // Use 'content'
-        
+        code.textContent = data.content;
         const copyBtn = document.createElement('button');
         copyBtn.textContent = 'Copy';
         copyBtn.className = 'btn copy-btn';
         copyBtn.onclick = () => {
             fallbackCopyTextToClipboard(data.content, copyBtn);
         };
-
         const deleteBtn = document.createElement('button');
         deleteBtn.textContent = 'Delete';
         deleteBtn.className = 'btn admin-btn delete-btn';
@@ -113,38 +103,30 @@ function displayMessage(data) {
                 socket.emit('deleteMessage', data.id);
             }
         };
-        
         const editBtn = document.createElement('button');
         editBtn.textContent = 'Edit';
         editBtn.className = 'btn admin-btn edit-btn';
-
         pre.appendChild(code);
         pre.appendChild(copyBtn);
         pre.appendChild(deleteBtn);
         pre.appendChild(editBtn);
         displayContainer.appendChild(pre);
         item.appendChild(displayContainer);
-        
         const editContainer = document.createElement('div');
         editContainer.className = 'edit-container';
-        
         const editTextArea = document.createElement('textarea');
         editTextArea.className = 'edit-textarea';
         editTextArea.value = data.content;
-        
         const saveBtn = document.createElement('button');
         saveBtn.textContent = 'Save';
         saveBtn.className = 'btn save-btn';
-        
         const cancelBtn = document.createElement('button');
         cancelBtn.textContent = 'Cancel';
         cancelBtn.className = 'btn cancel-btn';
-
         editContainer.appendChild(editTextArea);
         editContainer.appendChild(saveBtn);
         editContainer.appendChild(cancelBtn);
         item.appendChild(editContainer);
-
         editBtn.onclick = () => { item.classList.add('is-editing'); };
         cancelBtn.onclick = () => { item.classList.remove('is-editing'); editTextArea.value = data.content; };
         saveBtn.onclick = () => {
@@ -153,23 +135,22 @@ function displayMessage(data) {
                 newCode: editTextArea.value
             });
         };
-
         if (typeof hljs !== 'undefined') {
             hljs.highlightElement(code);
         }
     }
-    
     messages.appendChild(item);
 }
 
 // --- (Notification Helper Function) ---
-function showNotification(msg) {
-    const item = document.createElement('li');
-    item.className = 'notification';
-    item.textContent = msg;
-    messages.appendChild(item);
-    scrollToBottom();
-}
+// This is now only used for testing/errors if you want
+// function showNotification(msg) {
+//     const item = document.createElement('li');
+//     item.className = 'notification';
+//     item.textContent = msg;
+//     messages.appendChild(item);
+//     scrollToBottom();
+// }
 
 // --- (Join Chat Helper Function) ---
 function joinChat(name) {
@@ -237,13 +218,10 @@ sendFileBtn.addEventListener('click', () => {
         fileStatus.textContent = 'No file selected!';
         return;
     }
-    
-    // Size limit
     if (file.size > 1e8) { // 100MB
         fileStatus.textContent = 'File is too large (max 100MB)';
         return;
     }
-
     const reader = new FileReader();
     reader.onload = (e) => {
         const buffer = e.target.result;
@@ -253,16 +231,13 @@ sendFileBtn.addEventListener('click', () => {
         });
         fileStatus.textContent = `Uploading ${file.name}...`;
     };
-    
-    // Handle successful upload confirmation
     socket.once('newMessage', (data) => {
         if (data.type === 'file' && data.name === myName) {
              fileStatus.textContent = `Upload complete!`;
-             fileInput.value = ''; // Clear the file input
+             fileInput.value = '';
              setTimeout(() => fileStatus.textContent = '', 3000);
         }
     });
-
     reader.readAsArrayBuffer(file);
 });
 
@@ -270,12 +245,12 @@ sendFileBtn.addEventListener('click', () => {
 // --- Socket Listeners (Receiving data) ---
 socket.on('loadHistory', (history) => {
     messages.innerHTML = '';
-    history.forEach(data => displayMessage(data)); // Use displayMessage
+    history.forEach(data => displayMessage(data));
     setTimeout(() => messages.scrollTop = messages.scrollHeight, 100); 
 });
 
 socket.on('newMessage', (data) => {
-    displayMessage(data); // Use displayMessage
+    displayMessage(data);
     scrollToBottom();
 });
 
@@ -288,19 +263,7 @@ socket.on('adminStatus', (data) => {
     }
 });
 
-socket.on('userJoined', (msg) => {
-    showNotification(msg);
-});
-
-socket.on('userLeft', (msg) => {
-    showNotification(msg);
-});
-
-socket.on('updateUserList', (users) => {
-    userList.innerHTML = '';
-    users.forEach(name => {
-        const item = document.createElement('li');
-        item.textContent = name;
-        userList.appendChild(item);
-    });
-});
+// --- All user list listeners REMOVED ---
+// socket.on('userJoined', ...);
+// socket.on('userLeft', ...);
+// socket.on('updateUserList', ...);
