@@ -1,0 +1,288 @@
+body { 
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; 
+    margin: 0; 
+    background: #f4f4f4; 
+    overflow: hidden; /* Prevents body scroll */
+}
+
+#login-screen { 
+    padding: 20px; 
+    text-align: center; 
+    margin-top: 50px; 
+}
+
+#chat-screen { 
+    display: none; 
+}
+
+#app-container { 
+    display: flex; 
+    flex-direction: row; 
+    height: 100vh; 
+}
+
+#chat-container { 
+    flex-grow: 1; 
+    display: flex; 
+    flex-direction: column; 
+    padding: 20px; 
+    box-sizing: border-box;
+    height: 100%; 
+    position: relative; /* Needed for absolute positioning of scroll button */
+}
+
+#user-list-container { 
+    width: 200px; 
+    min-width: 150px; 
+    background: #f0f0f0; 
+    border-left: 1px solid #ddd; 
+    padding: 10px; 
+    box-sizing: border-box; 
+    height: 100vh; 
+    overflow-y: auto; 
+    flex-shrink: 0;
+    display: none; /* Hide by default */
+}
+#user-list-container h2 { 
+    margin-top: 0; 
+    font-size: 1.1em; 
+}
+#user-list { 
+    list-style-type: none; 
+    padding: 0; 
+    margin: 0; 
+}
+#user-list li { 
+    padding: 5px 0; 
+    border-bottom: 1px solid #eee; 
+}
+
+#messages { 
+    list-style-type: none; 
+    margin: 0; 
+    padding: 0; 
+    flex-grow: 1;
+    overflow-y: scroll; 
+    border: 1px solid #ddd; 
+    background: #fff; 
+    padding: 10px; 
+    border-radius: 8px; 
+}
+#messages li { 
+    padding: 8px 12px; 
+    margin-bottom: 10px; 
+    position: relative; 
+}
+#messages li.notification { 
+    font-style: italic; 
+    color: #888; 
+    text-align: center; 
+}
+pre { 
+    background: #2d2d2d; 
+    color: #f1f1f1; 
+    padding: 15px; 
+    border-radius: 5px; 
+    overflow-x: auto; 
+    white-space: pre; 
+    position: relative; 
+}
+code { 
+    font-family: "Courier New", Courier, monospace; 
+}
+
+/* --- NEW FILE MESSAGE STYLE --- */
+.file-message a {
+    display: inline-block;
+    padding: 10px 15px;
+    background: #e9f5ff;
+    border: 1px solid #007aff;
+    border-radius: 5px;
+    text-decoration: none;
+    color: #007aff;
+    font-weight: 500;
+}
+.file-message a:hover {
+    background: #d4e9ff;
+}
+
+/* --- SCROLL BUTTON STYLE --- */
+.scroll-btn {
+    display: none; /* Hidden by default */
+    position: absolute;
+    bottom: 110px; /* Adjust as needed */
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(0, 0, 0, 0.5);
+    color: white;
+    border: none;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    font-size: 24px;
+    line-height: 40px;
+    cursor: pointer;
+    z-index: 10;
+}
+.scroll-btn:hover {
+    background: rgba(0, 0, 0, 0.7);
+}
+
+/* --- BUTTON STYLES --- */
+.btn { 
+    border: none; 
+    padding: 5px 8px; 
+    border-radius: 3px; 
+    cursor: pointer; 
+    color: white; 
+}
+.copy-btn { 
+    position: absolute; 
+    top: 5px; 
+    left: 5px;
+    background: #555; 
+}
+.copy-btn:hover { 
+    background: #777; 
+}
+
+.admin-btn { 
+    display: none; 
+    font-size: 0.8em; 
+    padding: 3px 6px; 
+}
+.delete-btn { 
+    position: absolute; 
+    top: 5px; 
+    right: 5px;
+    background: #d93025; 
+}
+.delete-btn:hover { 
+    background: #a52714; 
+}
+.edit-btn { 
+    position: absolute; 
+    top: 5px; 
+    right: 55px;
+    background: #007aff; 
+}
+.edit-btn:hover { 
+    background: #0056b3; 
+}
+
+body.is-admin .admin-btn { 
+    display: inline-block; 
+}
+
+body.is-admin #user-list-container {
+    display: block;
+}
+
+/* --- DELETED MESSAGE STYLE --- */
+.is-deleted pre { 
+    background: #f0f0f0; 
+}
+.is-deleted code { 
+    color: #888; 
+    font-style: italic; 
+}
+.is-deleted .copy-btn, .is-deleted .admin-btn { 
+    display: none; 
+}
+.is-deleted.file-message {
+    display: none; /* Hide deleted file messages entirely */
+}
+
+
+/* --- EDITING STYLES --- */
+.edit-container { 
+    display: none; 
+}
+.edit-textarea { 
+    width: 98%; 
+    min-height: 80px; 
+    margin-top: 5px; 
+    font-family: "Courier New", monospace; 
+}
+.save-btn { 
+    background: #28a745; 
+    margin-right: 5px; 
+}
+.cancel-btn { 
+    background: #888; 
+}
+
+.is-editing .display-container { 
+    display: none; 
+}
+.is-editing .edit-container { 
+    display: block; 
+}
+
+/* --- FORM --- */
+#form { 
+    display: flex; 
+    margin-top: 10px; 
+    flex-shrink: 0; 
+}
+#input { 
+    flex-grow: 1; 
+    border: 1px solid #ddd; 
+    padding: 10px; 
+    border-radius: 5px; 
+    min-height: 50px; 
+    resize: vertical; 
+}
+#form button { 
+    background: #007aff; 
+    color: white; 
+    border: none; 
+    padding: 10px 15px; 
+    border-radius: 5px; 
+    margin-left: 10px; 
+    cursor: pointer; 
+}
+
+/* --- FILE FORM --- */
+#file-form {
+    display: flex;
+    margin-top: 5px;
+    align-items: center;
+}
+#file-status {
+    margin-left: 10px;
+    font-size: 0.9em;
+    opacity: 0.7;
+}
+
+/* --- RESPONSIVENESS --- */
+@media (max-width: 768px) {
+    #app-container {
+        flex-direction: column;
+    }
+    #chat-container {
+        padding: 10px;
+        height: 70vh;
+    }
+    #user-list-container {
+        width: 100%;
+        height: 30vh;
+        border-left: none;
+        border-top: 1px solid #ddd;
+    }
+    #messages {
+        height: 100%;
+    }
+    #form {
+        margin-top: 5px;
+    }
+    #input {
+        min-height: 40px;
+    }
+    .scroll-btn {
+        bottom: 85px; /* Adjust for smaller forms */
+    }
+    #file-form {
+        flex-wrap: wrap; /* Allow wrapping on small screens */
+    }
+}
